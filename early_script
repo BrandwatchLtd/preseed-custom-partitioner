@@ -1,0 +1,12 @@
+#!/bin/sh
+
+. /usr/share/debconf/confmodule
+
+set -e
+
+anna-install parted-udeb
+preseed_fetch lvm.sh /tmp/lvm.sh
+chmod 755 /tmp/lvm.sh
+
+echo /tmp/lvm.sh installer >> /var/lib/dpkg/info/download-installer.postinst
+
