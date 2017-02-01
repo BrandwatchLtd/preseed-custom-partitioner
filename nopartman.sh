@@ -1,6 +1,6 @@
 #!/bin/sh
-# Manually create LVM configuration
-# Partman does not currently support multi-disk lvm
+# Manually create disk configuration
+# Partman does not currently support multi-disk lvm and it's shit
 # Designed to be run after download-installer but before partman-base
 # This allows us to modify partman-base.postinst after it's been dropped in by anna
 # Partman appears to be entirely an external program, removing the call to partman from partman-base.postinst prevents it from running.
@@ -10,19 +10,19 @@ case "$1" in
     # we should have d-i downloaded by now.  
     # partman comes in a udeb from the network so we have to hook here  
     # and replace the partman-base.postinst file
-    sed -i 's/partman/\/tmp\/lvm.sh destroy; \/tmp\/lvm.sh partman/' /var/lib/dpkg/info/partman-base.postinst
-    logger lvm.sh modified partman-base.postinst
+    sed -i 's/partman/\/tmp\/nopartman.sh destroy; \/tmp\/nopartman.sh partman/' /var/lib/dpkg/info/partman-base.postinst
+    logger nopartman.sh modified partman-base.postinst
   ;;
   partman)  
     # do filesystem stuff: detect our config, fdisk, lvms, mount /target
-    logger lvm.sh partition configuration starting 
+    logger nopartman.sh partition configuration starting 
     modprobe dm_mod
 
     DISK_COUNT=`ls -1 /dev/sd? | wc -l`
 
     # Fallback to normal partman setup if we don't detect our disks
     if [ $DISK_COUNT -eq 0 ]; then
-      logger -t lvm.sh Cannot detect disks, running partman
+      logger -t nopartman.sh Cannot detect disks, running partman
       partman
       exit
     fi
@@ -106,7 +106,7 @@ case "$1" in
    
     ;;
   destroy)
-    logger lvm.sh Destroying existing volumes
+    logger nopartman.sh Destroying existing volumes
     umount /target/boot
     umount /target/var
     umount /target/home

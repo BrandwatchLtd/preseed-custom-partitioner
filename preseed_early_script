@@ -1,0 +1,12 @@
+#!/bin/sh
+
+. /usr/share/debconf/confmodule
+
+set -e
+
+anna-install parted-udeb
+preseed_fetch nopartman.sh /tmp/nopartman.sh
+chmod 755 /tmp/nopartman.sh
+
+echo /tmp/nopartman.sh installer >> /var/lib/dpkg/info/download-installer.postinst
+
